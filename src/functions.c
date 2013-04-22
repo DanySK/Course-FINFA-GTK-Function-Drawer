@@ -34,9 +34,8 @@ static double cosx(double x){
 	return cos(x);
 }
 
-static const double MAX_COMPUTABLE_EXP = 12;
 static double ex(double x){
-	return exp(x < MAX_COMPUTABLE_EXP ? x : MAX_COMPUTABLE_EXP);
+	return exp(x);
 }
 
 static double logx(double x){

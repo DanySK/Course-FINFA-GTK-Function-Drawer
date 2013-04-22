@@ -8,6 +8,14 @@
  ============================================================================
  */
 
+#ifndef MAXVAL
+#define MAXVAL 1000
+#endif
+
+#ifndef MAX_SCREEN_RESOLUTION
+#define MAX_SCREEN_RESOLUTION 100000
+#endif
+
 /*
  * #include Includes system header files if used with <>, while searches the
  * local path if "" are used.
@@ -32,11 +40,26 @@ static GtkWidget *window, *functions_box, *filters_box, *drawing_area;
 static GtkAdjustment *minx_adj, *maxx_adj, *miny_adj, *maxy_adj, *precision_adj;
 
 int xToScreen(double x) {
-	return (x - minx) * width / (maxx - minx);
+	if(x > MAXVAL) {
+		return MAX_SCREEN_RESOLUTION;
+	}
+	if(x < -MAXVAL) {
+		return -MAX_SCREEN_RESOLUTION;
+	}
+	return (int)((x - minx) * width / (maxx - minx));
 }
 
 int yToScreen(double y) {
-	return height - ((y - miny) * height / (maxy - miny));
+	/*
+	 * y coordinates are from top to bottom!
+	 */
+	if(y > MAXVAL) {
+		return -MAX_SCREEN_RESOLUTION;
+	}
+	if(y < -MAXVAL) {
+		return MAX_SCREEN_RESOLUTION;
+	}
+	return (int)(height - ((y - miny) * height / (maxy - miny)));
 }
 
 static void draw_function(cairo_t *cr) {
@@ -238,7 +261,7 @@ static void save(GtkApplication *app, gpointer user_data) {
 static void activate(GtkApplication *app, gpointer user_data) {
 	GtkWidget *hlayout, *rlayout, *save_button, *minx_scale, *maxx_scale, *miny_scale, *maxy_scale, *precision_scale;
 
-	gdouble v = 10, lower = 0.001, upper = 1000, step = 0.1, page = 1, page_s = 1;
+	gdouble v = 10, lower = 0.001, upper = MAXVAL, step = 0.1, page = 1, page_s = 1;
 
 	minx_adj = gtk_adjustment_new(v, lower, upper, step, page, page_s);
 	maxx_adj = gtk_adjustment_new(v, lower, upper, step, page, page_s);
@@ -375,7 +398,7 @@ int main(int argc, char **argv) {
 	 * If no application ID is given then some features of GApplication (most
 	 * notably application uniqueness) will be disabled.
 	 */
-	app = gtk_application_new("it.unibo.apice.FunctionDrawer", G_APPLICATION_FLAGS_NONE);
+	app = gtk_application_new("it.unibo.FunctionDrawer", G_APPLICATION_FLAGS_NONE);
 
 	/*
 	 * Connects a GCallback function to a signal for a particular object.
