@@ -27,7 +27,7 @@ Point2D* invert(const Point2D *parray, const unsigned int n){
 }
 
 
-void init_filters(){
+void init_filters(void){
 	filters_number = 2;
 	filters = (filter*) malloc(sizeof(filter) * filters_number);
 

@@ -29,7 +29,7 @@ typedef struct function_t {
 function* functions;
 int functions_number;
 
-void init_functions();
+void init_functions(void);
 
 unsigned int compute(function_t f, double min, double max, double precision, Point2D **points);
 

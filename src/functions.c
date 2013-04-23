@@ -34,9 +34,8 @@ static double cosx(double x){
 	return cos(x);
 }
 
-static const double MAX_COMPUTABLE_EXP = 12;
 static double ex(double x){
-	return exp(x < MAX_COMPUTABLE_EXP ? x : MAX_COMPUTABLE_EXP);
+	return exp(x);
 }
 
 static double logx(double x){
@@ -47,7 +46,7 @@ static double tanx(double x){
 	return tan(x);
 }
 
-void init_functions(){
+void init_functions(void){
 	functions_number = 6;
 
 	functions = (function *) malloc(sizeof(function) * functions_number);

@@ -375,7 +375,7 @@ int main(int argc, char **argv) {
 	 * If no application ID is given then some features of GApplication (most
 	 * notably application uniqueness) will be disabled.
 	 */
-	app = gtk_application_new("it.unibo.apice.FunctionDrawer", G_APPLICATION_FLAGS_NONE);
+	app = gtk_application_new("it.unibo.FunctionDrawer", G_APPLICATION_FLAGS_NONE);
 
 	/*
 	 * Connects a GCallback function to a signal for a particular object.

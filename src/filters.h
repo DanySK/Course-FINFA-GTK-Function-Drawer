@@ -25,6 +25,6 @@ typedef struct filter {
 filter* filters;
 int filters_number;
 
-void init_filters();
+void init_filters(void);
 
 #endif /* FILTERS_H_ */
