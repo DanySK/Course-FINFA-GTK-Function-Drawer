@@ -46,7 +46,7 @@ static double tanx(double x){
 	return tan(x);
 }
 
-void init_functions(){
+void init_functions(void){
 	functions_number = 6;
 
 	functions = (function *) malloc(sizeof(function) * functions_number);
