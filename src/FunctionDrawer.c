@@ -268,7 +268,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
 	miny_adj = gtk_adjustment_new(v, lower, upper, step, page, page_s);
 	maxy_adj = gtk_adjustment_new(v, lower, upper, step, page, page_s);
 
-	precision_adj = gtk_adjustment_new(1000, 10, 10000, 1, page, page_s);
+	precision_adj = gtk_adjustment_new(100, 10, 1000, 1, page, page_s);
 
 	window = gtk_application_window_new(app);
 	gtk_window_set_title(GTK_WINDOW (window), "FINF-A Function Drawer");

@@ -44,11 +44,10 @@ static GdkRGBA* gen_color_red(void) {
 	return white;
 }
 
-void init_color_factory(void){
+void init_color_factory(void) {
 	color_white = gen_color_white();
 	color_black = gen_color_black();
 	color_blue = gen_color_blue();
 	color_red = gen_color_red();
 }
-
 
