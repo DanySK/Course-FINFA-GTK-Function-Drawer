@@ -410,9 +410,11 @@ src/colorfactory.d: ../src/colorfactory.c /usr/include/gtk-3.0/gtk/gtk.h \
  /usr/include/gtk-3.0/gtk/gtkinfobar.h \
  /usr/include/gtk-3.0/gtk/gtkinvisible.h \
  /usr/include/gtk-3.0/gtk/gtklayout.h \
+ /usr/include/gtk-3.0/gtk/gtklevelbar.h \
  /usr/include/gtk-3.0/gtk/gtklinkbutton.h \
  /usr/include/gtk-3.0/gtk/gtklockbutton.h \
  /usr/include/gtk-3.0/gtk/gtkmain.h /usr/include/gtk-3.0/gtk/gtkmenubar.h \
+ /usr/include/gtk-3.0/gtk/gtkmenubutton.h \
  /usr/include/gtk-3.0/gtk/gtkmenutoolbutton.h \
  /usr/include/gtk-3.0/gtk/gtktoolbutton.h \
  /usr/include/gtk-3.0/gtk/gtktoolitem.h \
@@ -452,6 +454,7 @@ src/colorfactory.d: ../src/colorfactory.c /usr/include/gtk-3.0/gtk/gtk.h \
  /usr/include/gtk-3.0/gtk/gtkscrollable.h \
  /usr/include/gtk-3.0/gtk/gtkscrollbar.h \
  /usr/include/gtk-3.0/gtk/gtkscrolledwindow.h \
+ /usr/include/gtk-3.0/gtk/gtksearchentry.h \
  /usr/include/gtk-3.0/gtk/gtkseparator.h \
  /usr/include/gtk-3.0/gtk/gtkseparatormenuitem.h \
  /usr/include/gtk-3.0/gtk/gtkseparatortoolitem.h \
@@ -1401,6 +1404,8 @@ src/colorfactory.d: ../src/colorfactory.c /usr/include/gtk-3.0/gtk/gtk.h \
 
 /usr/include/gtk-3.0/gtk/gtklayout.h:
 
+/usr/include/gtk-3.0/gtk/gtklevelbar.h:
+
 /usr/include/gtk-3.0/gtk/gtklinkbutton.h:
 
 /usr/include/gtk-3.0/gtk/gtklockbutton.h:
@@ -1408,6 +1413,8 @@ src/colorfactory.d: ../src/colorfactory.c /usr/include/gtk-3.0/gtk/gtk.h \
 /usr/include/gtk-3.0/gtk/gtkmain.h:
 
 /usr/include/gtk-3.0/gtk/gtkmenubar.h:
+
+/usr/include/gtk-3.0/gtk/gtkmenubutton.h:
 
 /usr/include/gtk-3.0/gtk/gtkmenutoolbutton.h:
 
@@ -1486,6 +1493,8 @@ src/colorfactory.d: ../src/colorfactory.c /usr/include/gtk-3.0/gtk/gtk.h \
 /usr/include/gtk-3.0/gtk/gtkscrollbar.h:
 
 /usr/include/gtk-3.0/gtk/gtkscrolledwindow.h:
+
+/usr/include/gtk-3.0/gtk/gtksearchentry.h:
 
 /usr/include/gtk-3.0/gtk/gtkseparator.h:
 

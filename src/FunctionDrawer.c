@@ -22,7 +22,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-//#include <glib.h>
+#include <glib.h>
 #include <math.h>
 #include <gtk/gtk.h>
 #include "colorfactory.h"
@@ -30,50 +30,50 @@
 #include "filters.h"
 
 static double minx = -10.0, maxx = 10.0, miny = -10.0, maxy = 10;
-static const int DIVS = 8, TICKWIDTH = 5, MAX_SAMPLES_FROM_FILE = 100000;
+static const int DIVS = 8, TICKWIDTH = 5; // MAX_SAMPLES_FROM_FILE = 100000;
 static guint width, height;
 static Point2D* points;
-static unsigned int pointsnr, samples;
+static unsigned int pointsnr; //, samples;
 static gint active_function, active_filter;
-static Point2D **pts_ptr, *pts, *filtered;
+static GArray *pts, *filtered;
 static GtkWidget *window, *functions_box, *filters_box, *drawing_area;
 static GtkAdjustment *minx_adj, *maxx_adj, *miny_adj, *maxy_adj, *precision_adj;
 
 int xToScreen(double x) {
-	if(x > MAXVAL) {
+	if (x > MAXVAL) {
 		return MAX_SCREEN_RESOLUTION;
 	}
-	if(x < -MAXVAL) {
+	if (x < -MAXVAL) {
 		return -MAX_SCREEN_RESOLUTION;
 	}
-	return (int)((x - minx) * width / (maxx - minx));
+	return (int) ((x - minx) * width / (maxx - minx));
 }
 
 int yToScreen(double y) {
 	/*
 	 * y coordinates are from top to bottom!
 	 */
-	if(y > MAXVAL) {
+	if (y > MAXVAL) {
 		return -MAX_SCREEN_RESOLUTION;
 	}
-	if(y < -MAXVAL) {
+	if (y < -MAXVAL) {
 		return MAX_SCREEN_RESOLUTION;
 	}
-	return (int)(height - ((y - miny) * height / (maxy - miny)));
+	return (int) (height - ((y - miny) * height / (maxy - miny)));
 }
 
 static void draw_function(cairo_t *cr) {
 	/*
 	 * At least two points are needed
 	 */
-	if (samples >= 2) {
+	if (pts->len >= 2) {
 		/*
 		 * Print the function in blue
 		 */
 		unsigned int i;
-		for (i = 0; i < samples - 1; i++) {
-			cairo_move_to(cr, xToScreen(pts[i].x), yToScreen(pts[i].y));
-			cairo_line_to(cr, xToScreen(pts[i + 1].x), yToScreen(pts[i + 1].y));
+		for (i = 0; i < pts->len - 1; i++) {
+			cairo_move_to(cr, xToScreen(g_array_index(pts, Point2D, i) .x), yToScreen(g_array_index(pts, Point2D, i).y));
+			cairo_line_to(cr, xToScreen(g_array_index(pts, Point2D, i+1).x), yToScreen(g_array_index(pts, Point2D, i+1).y));
 		}
 		gdk_cairo_set_source_rgba(cr, color_blue);
 		cairo_stroke(cr);
@@ -81,9 +81,9 @@ static void draw_function(cairo_t *cr) {
 		/*
 		 * Print the filtered function, in red
 		 */
-		for (i = 0; i < samples - 1; i++) {
-			cairo_move_to(cr, xToScreen(filtered[i].x), yToScreen(filtered[i].y));
-			cairo_line_to(cr, xToScreen(filtered[i + 1].x), yToScreen(filtered[i + 1].y));
+		for (i = 0; i < filtered->len - 1; i++) {
+			cairo_move_to(cr, xToScreen(g_array_index(filtered, Point2D, i) .x), yToScreen(g_array_index(filtered, Point2D, i).y));
+			cairo_line_to(cr, xToScreen(g_array_index(filtered, Point2D, i+1).x), yToScreen(g_array_index(filtered, Point2D, i+1).y));
 		}
 		gdk_cairo_set_source_rgba(cr, color_red);
 		cairo_stroke(cr);
@@ -150,34 +150,41 @@ gboolean draw_callback(GtkWidget *widget, cairo_t *cr, gpointer data) {
 	gdk_cairo_set_source_rgba(cr, color_black);
 	cairo_fill(cr);
 
-	return FALSE;
+	return TRUE;
 }
 
-static void load(){
+static void cleanup(void) {
+	if (pts->len > 0) {
+		g_array_remove_range(pts, 0, pts->len);
+	}
+	if (filtered->len > 0) {
+		g_array_remove_range(filtered, 0, filtered->len);
+	}
+}
+
+static void load() {
 	GtkWidget *dialog;
 	GtkWindow *parent = GTK_WINDOW(gtk_widget_get_parent_window(window));
 	dialog = gtk_file_chooser_dialog_new("Open File", parent, GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL );
-	samples = 0;
 	if (gtk_dialog_run(GTK_DIALOG (dialog) ) == GTK_RESPONSE_ACCEPT) {
 		char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog) );
 		FILE *file = fopen(filename, "r");
 		if (file == NULL ) {
 			printf("Error Reading File\n");
 		} else {
-			pts = (Point2D *) malloc(sizeof(Point2D) * MAX_SAMPLES_FROM_FILE);
-			filtered = (Point2D *) malloc(sizeof(Point2D) * MAX_SAMPLES_FROM_FILE);
+			cleanup();
 			double x, y;
-			while (fscanf(file, "%lf %lf", &x, &y) == 2 && samples < MAX_SAMPLES_FROM_FILE) {
-				pts[samples / 2].x = x;
-				pts[samples / 2].y = y;
-				samples += 2;
+			while (fscanf(file, "%lf %lf", &x, &y) == 2) {
+				Point2D pt;
+				pt.x = x;
+				pt.y = y;
+				g_array_append_val(pts, pt);
 			}
 			g_free(filename);
 		}
 		fclose(file);
 	} else {
-		pts = (Point2D *) malloc(sizeof(Point2D *));
-		filtered = (Point2D *) malloc(sizeof(Point2D *));
+		cleanup();
 	}
 	gtk_widget_destroy(dialog);
 }
@@ -186,9 +193,7 @@ static void redraw(GtkApplication *app, gpointer user_data) {
 	/*
 	 * Clean previous results
 	 */
-	free(filtered);
-	free(pts);
-
+	cleanup();
 	/*
 	 * Get current data
 	 */
@@ -216,16 +221,14 @@ static void redraw(GtkApplication *app, gpointer user_data) {
 		 * We must then create a pointer to a pointer and allocate enough memory
 		 * to store the pointer to the first element of the array.
 		 */
-		double precision = (maxx-minx) / gtk_adjustment_get_value(precision_adj);
-		samples = compute(fun, minx, maxx, precision, pts_ptr);
-		pts = *pts_ptr;
-
+		double precision = (maxx - minx) / gtk_adjustment_get_value(precision_adj);
+		compute(fun, minx, maxx, precision, pts);
 	}
 	/*
 	 * Run the filter
 	 */
 	filter_t fil = filters[active_filter].filter_function;
-	filtered = fil(pts, samples);
+	fil(pts, filtered);
 	/*
 	 * Schedule a redraw
 	 */
@@ -242,10 +245,10 @@ static void save(GtkApplication *app, gpointer user_data) {
 		char *filename;
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog) );
 		FILE *file = fopen(filename, "w");
-		if(file != NULL){
+		if (file != NULL ) {
 			int i;
-			for(i = 0; i<samples && fprintf(file, "%lf %lf\n", filtered[i].x, filtered[i].y); i++);
-			if(i != samples){
+			for (i = 0; i < pts->len && fprintf(file, "%lf %lf\n", g_array_index(filtered, Point2D, i) .x, g_array_index(filtered, Point2D, i).y); i++);
+			if (i != pts->len) {
 				printf("Error Writing File\n");
 			}
 		} else {
@@ -275,7 +278,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
 	gtk_window_set_default_size(GTK_WINDOW(window), 1024, 768);
 
 	hlayout = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
-	gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(hlayout));
+	gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(hlayout) );
 
 	drawing_area = gtk_drawing_area_new();
 	gtk_widget_set_size_request(drawing_area, 768, 768);
@@ -370,16 +373,14 @@ static void activate(GtkApplication *app, gpointer user_data) {
 }
 
 static void init() {
-	samples = 0;
 	init_color_factory();
 	init_functions();
 	init_filters();
-	pts_ptr = (Point2D **) malloc(sizeof(Point2D *));
 	/*
 	 * Fake data
 	 */
-	pts = (Point2D *) malloc(sizeof(Point2D *));
-	filtered = (Point2D *) malloc(sizeof(Point2D *));
+	pts = g_array_new(FALSE, FALSE, sizeof(Point2D)); //(Point2D *) malloc(sizeof(Point2D *));
+	filtered = g_array_new(FALSE, FALSE, sizeof(Point2D)); //(Point2D *) malloc(sizeof(Point2D *));
 
 	pointsnr = 0;
 	points = (Point2D *) malloc(pointsnr * sizeof(Point2D));

@@ -4,30 +4,34 @@
  *  Created on: Jan 18, 2013
  *      Author: Danilo Pianini
  */
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
 #include "filters.h"
 
-Point2D* same(const Point2D *parray, const unsigned int n){
-	size_t s = sizeof(Point2D) * n;
-	Point2D *p = (Point2D*) malloc(s);
-	memcpy(p, parray, s);
-	return p;
-}
-
-Point2D* invert(const Point2D *parray, const unsigned int n){
-	Point2D *p = (Point2D*) malloc(sizeof(Point2D) * n);
-	unsigned int i;
-	for(i = 0; i<n; i++){
-		p[i].x = parray[i].x;
-		p[i].y = -parray[i].y;
+void same(GArray *points, GArray *filtered) {
+	if (filtered->len > 0) {
+		g_array_remove_range(filtered, 0, filtered->len);
 	}
-	return p;
+	int i;
+	for (i = 0; i < points->len; i++) {
+		g_array_append_val(filtered, g_array_index(points, Point2D, i));
+	}
 }
 
+void invert(GArray *points, GArray *filtered) {
+	if (filtered->len > 0) {
+		g_array_remove_range(filtered, 0, filtered->len);
+	}
+	int i;
+	for (i = 0; i < points->len; i++) {
+		Point2D pto = g_array_index(points, Point2D, i) ;
+		Point2D pt;
+		pt.x = pto.x;
+		pt.y = -pto.y;
+		g_array_append_val(filtered, pt);
+	}
+}
 
-void init_filters(void){
+void init_filters(void) {
 	filters_number = 2;
 	filters = (filter*) malloc(sizeof(filter) * filters_number);
 

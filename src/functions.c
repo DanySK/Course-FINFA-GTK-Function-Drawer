@@ -5,23 +5,21 @@
  *      Author: Danilo Pianini
  */
 
-#include <stdlib.h>
-#include <math.h>
 #include "functions.h"
 
 static double x(double x) {
 	return x;
 }
 
-unsigned int compute(function_t f, double min, double max, double precision, Point2D **points) {
+unsigned int compute(function_t f, double min, double max, double precision, GArray *points) {
 	unsigned int samples = (max - min) / precision + 1;
-	*points = (Point2D *) malloc(sizeof(Point2D) * samples);
-	Point2D* deref_points = *points;
 	unsigned int i;
 	for (i = 0; i < samples; i++) {
 		double v = min + i * precision;
-		deref_points[i].x = v;
-		deref_points[i].y = f(v);
+		Point2D pt;
+		pt.x = v;
+		pt.y = f(v);
+		g_array_append_val(points, pt);
 	}
 	return samples;
 }

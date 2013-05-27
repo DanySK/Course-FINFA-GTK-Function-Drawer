@@ -9,12 +9,15 @@
 #define FILTERS_H_
 
 #include "point.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <glib.h>
 
 /*
  * Defines a type for the filter functions: functions which, given an array of
  * n points, return an array of n points
  */
-typedef Point2D* (*filter_t)(const Point2D *points, const unsigned int n);
+typedef void (*filter_t)(GArray *points, GArray *filtered);
 
 typedef struct filter {
 	char *name;

@@ -9,6 +9,9 @@
 #define FUNCTIONS_H_
 
 #include "point.h"
+#include <stdlib.h>
+#include <math.h>
+#include <glib.h>
 
 typedef double (*function_t)(double x);
 /*
@@ -31,6 +34,6 @@ int functions_number;
 
 void init_functions(void);
 
-unsigned int compute(function_t f, double min, double max, double precision, Point2D **points);
+unsigned int compute(function_t f, double min, double max, double precision, GArray *points);
 
 #endif /* FUNCTIONS_H_ */

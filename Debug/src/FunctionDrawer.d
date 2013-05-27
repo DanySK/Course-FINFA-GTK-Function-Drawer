@@ -1,7 +1,6 @@
 src/FunctionDrawer.d: ../src/FunctionDrawer.c \
- /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gdk/gdk.h \
- /usr/include/gtk-3.0/gdk/gdkconfig.h /usr/include/glib-2.0/glib.h \
- /usr/include/glib-2.0/glib/galloca.h /usr/include/glib-2.0/glib/gtypes.h \
+ /usr/include/glib-2.0/glib.h /usr/include/glib-2.0/glib/galloca.h \
+ /usr/include/glib-2.0/glib/gtypes.h \
  /usr/lib/glib-2.0/include/glibconfig.h \
  /usr/include/glib-2.0/glib/gmacros.h \
  /usr/include/glib-2.0/glib/gversionmacros.h \
@@ -64,6 +63,8 @@ src/FunctionDrawer.d: ../src/FunctionDrawer.c \
  /usr/include/glib-2.0/glib/deprecated/gmain.h \
  /usr/include/glib-2.0/glib/deprecated/grel.h \
  /usr/include/glib-2.0/glib/deprecated/gthread.h \
+ /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gdk/gdk.h \
+ /usr/include/gtk-3.0/gdk/gdkconfig.h \
  /usr/include/gtk-3.0/gdk/gdkversionmacros.h \
  /usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h \
  /usr/include/glib-2.0/gio/gio.h /usr/include/glib-2.0/gio/giotypes.h \
@@ -510,12 +511,6 @@ src/FunctionDrawer.d: ../src/FunctionDrawer.c \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
  ../src/colorfactory.h ../src/functions.h ../src/point.h ../src/filters.h
 
-/usr/include/gtk-3.0/gtk/gtk.h:
-
-/usr/include/gtk-3.0/gdk/gdk.h:
-
-/usr/include/gtk-3.0/gdk/gdkconfig.h:
-
 /usr/include/glib-2.0/glib.h:
 
 /usr/include/glib-2.0/glib/galloca.h:
@@ -667,6 +662,12 @@ src/FunctionDrawer.d: ../src/FunctionDrawer.c \
 /usr/include/glib-2.0/glib/deprecated/grel.h:
 
 /usr/include/glib-2.0/glib/deprecated/gthread.h:
+
+/usr/include/gtk-3.0/gtk/gtk.h:
+
+/usr/include/gtk-3.0/gdk/gdk.h:
+
+/usr/include/gtk-3.0/gdk/gdkconfig.h:
 
 /usr/include/gtk-3.0/gdk/gdkversionmacros.h:
 
