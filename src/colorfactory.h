@@ -8,6 +8,9 @@
 #ifndef COLORFACTORY_H_
 #define COLORFACTORY_H_
 
+#include <gtk/gtk.h>
+#include <stdlib.h>
+
 const GdkRGBA* color_white;
 const GdkRGBA* color_black;
 const GdkRGBA* color_blue;

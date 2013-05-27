@@ -4,8 +4,6 @@
  *  Created on: Jan 15, 2013
  *      Author: Danilo Pianini
  */
-#include <gtk/gtk.h>
-#include <stdlib.h>
 #include "colorfactory.h"
 
 static GdkRGBA* gen_color_white(void) {
